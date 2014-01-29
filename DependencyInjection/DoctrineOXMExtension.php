@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Bundle\DoctrineAbstractBundle\DependencyInjection\AbstractDoctrineExtension;
+use Symfony\Bridge\Doctrine\DependencyInjection\AbstractDoctrineExtension;
 
 /**
  * Doctrine OXM extension.
@@ -26,11 +26,11 @@ class DoctrineOXMExtension extends AbstractDoctrineExtension
         // Load DoctrineMongoDBBundle/Resources/config/mongodb.xml
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('oxm.xml');
-        
+
         $processor = new Processor();
         $configuration = new Configuration($container->getParameter('kernel.debug'));
         $config = $processor->processConfiguration($configuration, $configs);
-        
+
         // can't currently default this correctly in Configuration
         if (!isset($config['metadata_cache_driver'])) {
             $config['metadata_cache_driver'] = array('type' => 'array');
@@ -66,7 +66,7 @@ class DoctrineOXMExtension extends AbstractDoctrineExtension
             $container
         );
     }
-    
+
     /**
      * Loads the xml-entity managers configuration.
      *
@@ -178,8 +178,8 @@ class DoctrineOXMExtension extends AbstractDoctrineExtension
             );
         }
     }
-    
-    
+
+
     /**
      * Loads the configured xml-entity manager metadata cache driver.
      *
@@ -208,7 +208,7 @@ class DoctrineOXMExtension extends AbstractDoctrineExtension
 
         $container->setDefinition(sprintf('doctrine.oxm.%s_metadata_cache', $xmlEntityManager['name']), $cacheDef);
     }
-    
+
     /**
      * Loads the configured storages.
      *
@@ -220,8 +220,8 @@ class DoctrineOXMExtension extends AbstractDoctrineExtension
         foreach ($storages as $name => $storage) {
             $oxmStorageType = $storage['type'];
             $oxmStorageDef = new Definition(sprintf('%%doctrine.oxm.%s_storage.class%%', $oxmStorageType));
-                     
-            
+
+
             if ('filesystem' == $oxmStorageType) {
                 $oxmStorageDef->addArgument($storage['path']);
                 $oxmStorageDef->addArgument($storage['extension']);
@@ -229,8 +229,8 @@ class DoctrineOXMExtension extends AbstractDoctrineExtension
             $container->setDefinition(sprintf('doctrine.oxm.%s_storage', $name), $oxmStorageDef);
         }
     }
-    
-    
+
+
     /**
      * Loads an OXM xml-entity managers bundle mapping information.
      *
@@ -285,8 +285,8 @@ class DoctrineOXMExtension extends AbstractDoctrineExtension
         }
         $oxmConfigDef->addMethodCall('setEntityNamespaces', array($this->aliasMap));
     }
-    
-    
+
+
     /**
      * Uses some of the extension options to override DI extension parameters.
      *

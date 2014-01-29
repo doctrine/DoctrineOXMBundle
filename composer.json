@@ -18,8 +18,7 @@
 
     "require": {
         "php":                              ">=5.3.2",
-        "doctrine/oxm":                     "master-dev",
-        "symfony/doctrine-abstract-bundle": "2.0.*"
+        "doctrine/oxm":                     "master-dev"
     },
 
     "autoload": {
